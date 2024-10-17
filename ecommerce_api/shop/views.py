@@ -1,14 +1,18 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Product, Category, Order, Promotion
+from .models import Product, Category, Order, Promotion, ProductImage
 from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
 from .filters import ProductFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from .serializers import PromotionSerializer
+from .serializers import PromotionSerializer, ProductImageSerializer
 
 # Create your views here.
+class ProductImageViewSet(viewsets.ModelViewSet):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 class ProductPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
