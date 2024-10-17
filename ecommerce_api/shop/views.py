@@ -1,11 +1,12 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Product, Category, Order
+from .models import Product, Category, Order, Promotion
 from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
 from .filters import ProductFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
+from .serializers import PromotionSerializer
 
 # Create your views here.
 class ProductPagination(PageNumberPagination):
@@ -62,6 +63,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+class PromotionViewSet(viewsets.ModelViewSet):
+    queryset = Promotion.objects.all()
+    serializer_class = PromotionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -72,3 +79,4 @@ class OrderViewSet(viewsets.ModelViewSet):
         if order.status == 'Completed':
             order.product.stock_quantity -= order.quantity
             order.product.save()
+
