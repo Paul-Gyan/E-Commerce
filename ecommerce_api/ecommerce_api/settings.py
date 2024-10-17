@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'users',
 ]
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,7 +81,7 @@ WSGI_APPLICATION = 'ecommerce_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ecommerce_api1',
+        'NAME': 'Ecommerce',
         'USER': 'root',
         'PASSWORD': 'Iloveowus@5280',
         'HOST': 'localhost',
@@ -128,3 +130,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
