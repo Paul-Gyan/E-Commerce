@@ -6,7 +6,8 @@ from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
 from .filters import ProductFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from .serializers import PromotionSerializer, ProductImageSerializer, WishlistSerializer
+from .serializers import PromotionSerializer, ProductImageSerializer, WishlistSerializer, ReviewSerializer
+from .models import Review
 
 # Create your views here.
 class ProductImageViewSet(viewsets.ModelViewSet):
@@ -94,4 +95,15 @@ class WishlistViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Wishlist.objects.filter(user=self.request.user)
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return Review.objects.filter(product_id=self.kwargs['product_pk'])
 

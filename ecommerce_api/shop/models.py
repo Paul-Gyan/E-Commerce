@@ -72,4 +72,14 @@ class Wishlist(models.Model):
     def __str__(self):
         return f"Wishlist {self.id} by {self.user.email}"
 
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name='reviews', on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Review {self.id} by {self.user.email}"
+
     
