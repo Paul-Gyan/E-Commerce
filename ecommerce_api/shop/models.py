@@ -4,6 +4,7 @@ from users.models import CustomUser
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -62,5 +63,13 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} by {self.user.email}"
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(CustomUser, related_name='wishlists', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='wishlisted_by', on_delete=models.CASCADE)
+    added_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Wishlist {self.id} by {self.user.email}"
 
     
