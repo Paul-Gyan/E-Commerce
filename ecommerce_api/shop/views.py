@@ -6,10 +6,13 @@ from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
 from .filters import ProductFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from .serializers import PromotionSerializer, ProductImageSerializer, WishlistSerializer, ReviewSerializer
-from .models import Review
+from .serializers import PromotionSerializer, ProductImageSerializer, WishlistSerializer, ReviewSerializer, PaymentSerializer
+from .models import Review, Payment
+import stripe
+from django.conf import settings
 
 # Create your views here.
+
 class ProductImageViewSet(viewsets.ModelViewSet):
     queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
@@ -106,4 +109,37 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Review.objects.filter(product_id=self.kwargs['product_pk'])
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        order = Order.objects.get(id=data['order_id'])
+
+        if order.status != 'Pending':
+            return Response({'error': 'Order cannot be paid.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            charge = stripe.Charge.create(
+                amount=int(order.total_price * 100),  # Amount in cents
+                currency='usd',
+                description=f'Order {order.id}',
+                source=data['stripe_token']
+            )
+            payment = Payment.objects.create(
+                order=order,
+                stripe_charge_id=charge.id,
+                amount=order.total_price,
+                status=charge.status
+            )
+            order.status = 'Completed'
+            order.save()
+            return Response(PaymentSerializer(payment).data, status=status.HTTP_201_CREATED)
+        except stripe.error.StripeError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

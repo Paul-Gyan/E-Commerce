@@ -148,4 +148,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+STRIPE_SECRET_KEY = 'your_secret_key'
+STRIPE_PUBLISHABLE_KEY = 'your_publishable_key'
+
+
 

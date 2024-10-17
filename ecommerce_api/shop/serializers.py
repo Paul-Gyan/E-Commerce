@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Product, Order, Promotion, ProductImage, Wishlist
-from .models import Review
+from .models import Review, Payment
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,5 +45,10 @@ class WishlistSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
+        fields = '__all__'
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
         fields = '__all__'
 
