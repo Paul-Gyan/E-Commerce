@@ -4,8 +4,7 @@ from users.models import CustomUser
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-
+    
     def __str__(self):
         return self.name
 
@@ -93,4 +92,25 @@ class Review(models.Model):
     def __str__(self):
         return f"Review {self.id} by {self.user.email}"
 
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, related_name='carts', on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart of {self.user.email}"
+
+class CartItem(models.Model):
+    Cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+    @property
+    def total_price(self):
+        return self.product.price * self.quantity
+
+
+    
     

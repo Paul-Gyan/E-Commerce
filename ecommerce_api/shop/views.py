@@ -2,14 +2,15 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Product, Category, Order, Promotion, ProductImage, Wishlist
-from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
+from .serializers import ProductSerializer, CategorySerializer, OrderSerializer, CartSerializer, CartItemSerializer
 from .filters import ProductFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from .serializers import PromotionSerializer, ProductImageSerializer, WishlistSerializer, ReviewSerializer, PaymentSerializer
-from .models import Review, Payment
+from .models import Review, Payment, CustomUser, Cart, CartItem
 import stripe
 from django.conf import settings
+
 
 # Create your views here.
 
@@ -66,10 +67,18 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class PromotionViewSet(viewsets.ModelViewSet):
     queryset = Promotion.objects.all()
@@ -142,4 +151,23 @@ class PaymentViewSet(viewsets.ModelViewSet):
             return Response(PaymentSerializer(payment).data, status=status.HTTP_201_CREATED)
         except stripe.error.StripeError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class CartViewSet(viewsets.ModelViewSet):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class CartItemViewSet(viewsets.ModelViewSet):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart__user=self.request.user)
 

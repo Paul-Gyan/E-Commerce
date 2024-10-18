@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Product, Order, Promotion, ProductImage, Wishlist
-from .models import Review, Payment
+from .models import Review, Payment, CustomUser, Cart, CartItem
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+        read_only_fields = ['id']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,4 +52,18 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = '__all__'
+
+class CartItemSerializer(serializers.Serializer):
+    total_price = serializers.ReadOnlyField()
+
+    class Meta:
+        model = CartItem
+        fields = ['product', 'quantity', 'total_price']
+
+class CartSerializer(serializers.Serializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    class Meta:
+        model = Cart
+        fields = ['id', 'created_date', 'user', 'items']
+
 

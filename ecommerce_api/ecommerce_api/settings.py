@@ -153,4 +153,16 @@ STRIPE_SECRET_KEY = 'your_secret_key'
 STRIPE_PUBLISHABLE_KEY = 'your_publishable_key'
 
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
+
+
 
