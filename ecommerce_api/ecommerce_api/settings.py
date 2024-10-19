@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-2nept6*&w!_vs6!5eui)i%qvvp9k^hw6ow1!h=+k3ekcpqr4r%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -96,10 +96,10 @@ WSGI_APPLICATION = 'ecommerce_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Ecommerce',
-        'USER': 'root',
+        'NAME': 'Paul97$ecommerce-alx',
+        'USER': 'Paul97',
         'PASSWORD': 'Iloveowus@5280',
-        'HOST': 'localhost',
+        'HOST': 'Paul97.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }
