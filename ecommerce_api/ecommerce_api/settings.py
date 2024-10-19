@@ -98,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Paul97$ecommerce-alx',
         'USER': 'Paul97',
-        'PASSWORD': 'Iloveowus@5280',
+        'PASSWORD': 'Gyankwasi@5280',
         'HOST': 'Paul97.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
