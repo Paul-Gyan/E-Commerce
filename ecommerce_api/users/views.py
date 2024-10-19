@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from shop.models import Order, Wishlist, Cart, CartItem
@@ -30,3 +30,7 @@ def user_dashboard(request):
     }
     return Response(data)
 
+class RegisterViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
