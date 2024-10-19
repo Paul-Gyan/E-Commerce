@@ -96,10 +96,10 @@ WSGI_APPLICATION = 'ecommerce_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Paul97$ecommerce-alx',
-        'USER': 'Paul97',
-        'PASSWORD': 'Gyankwasi@5280',
-        'HOST': 'Paul97.mysql.pythonanywhere-services.com',
+        'NAME': 'ecommerce1',
+        'USER': 'root',
+        'PASSWORD': 'Iloveowus@5280',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

@@ -4,7 +4,11 @@ from users.models import CustomUser
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='created_categories')
     
+
     def __str__(self):
         return self.name
 
@@ -100,7 +104,7 @@ class Cart(models.Model):
         return f"Cart of {self.user.email}"
 
 class CartItem(models.Model):
-    Cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
