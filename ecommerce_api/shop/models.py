@@ -4,7 +4,6 @@ from users.models import CustomUser
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='created_categories')
     
